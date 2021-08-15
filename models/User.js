@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 
-
 const UserSchema = new Schema (
     {
         username: {
@@ -13,7 +12,7 @@ const UserSchema = new Schema (
             type: String,
             required: true,
             unique: true,
-            //matching email
+            match: /.+\@.+\..+/
         },
         thoughts: [
             {
@@ -36,9 +35,9 @@ const UserSchema = new Schema (
 );
 
 UserSchema.virtual('friendCount').get(function() {
-    // function to retrieve length of the user's friends array field on query
+    return this.friends.reduce((total, friend) => total + friend.length + 1, 0);
 });
 
 const User = model('User', UserSchema);
 
-module.exports = Pizza;
+module.exports = User;

@@ -1,7 +1,7 @@
 const { User, Thought } = require('../models');
 
 const thoughtController = {
-    // get all thoughts
+    // get all thoughts /api/thoughts
     getAllThoughts (req, res) {
         Thought.find({})
             .then(dbThoughtData => res.json(dbThoughtData))
@@ -10,7 +10,7 @@ const thoughtController = {
                 res.status(400).json(err);
             });
     },
-    // get a signle thought by id
+    // get a single thought by id /api/thoughts/:id
     getThoughtById({ params }, res) {
         Thought.findOne({ _id: params.id })
             .then(dbThoughtData => {
@@ -25,9 +25,9 @@ const thoughtController = {
                 res.status(400).json(err);
             });
     },
-    // post to create a new thought, with new thought added to user's thought array field
+    // post to create a new thought, with new thought added to user's thought array field /api/thoughts
     createThought({ body }, res) {
-        Thought.createThought(body)
+        Thought.create(body)
             .then(({ _id }) => {
                 return User.findOneAndUpdate(
                     { _id: body.userId},
@@ -44,7 +44,7 @@ const thoughtController = {
             })
             .catch(err => res.status(400).json(err));
     },
-    // put to update a thought by id
+    // put to update a thought by id /api/thoughts/:id
     updateThought({ params, body }, res) {
         Thought.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
             .then(dbThoughtData => {
@@ -56,7 +56,7 @@ const thoughtController = {
             })
             .catch(err => res.status(400).json(err));
     },
-    // delete a thought by id
+    // delete a thought by id /api/thoughts/:id
     deleteThought({ params}, res) {
         Thought.findOneAndDelete({ _id: params.id })
             .then(dbThoughtData => {
